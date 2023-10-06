@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Lightweight client-side loader that feature-detects and load polyfills only when necessary -->
+  <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
+  <!-- Load the element definition -->
+  <script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@1/src/zero-md.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+  <style>
+    @font-face {
+      font-family: 'zpix';
+      src: url('zpix.ttf') format('opentype');
+    }
+
+    html,
+    body {
+      font-family: 'zpix', sans-serif;
+      cursor: url('assets/cursor.png'), auto;
+    }
+
+    .container {
+      margin: 0 auto;
+      padding: 2em;
+    }
+
+    .space-below-menu {
+      padding-top: 8em;
+      /* Adjust this value to create the desired amount of space */
+    }
+
+    .blog-card {
+      border: 2px solid #000;
+      border-radius: 5px;
+      overflow: hidden;
+      background-color: #ffffff;
+    }
+
+    .blog-card__background {
+      background-color: #b45a08;
+    }
+
+    .card__background--main {
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .blog-card__head {
+      background-color: #b45a08;
+      color: #fff;
+      padding: 1em;
+      text-align: center;
+    }
+
+    .date__box {
+      background-color: #000;
+      padding: 0.5em;
+      border-radius: 5px;
+    }
+
+    .blog-card__info {
+      padding: 1em;
+    }
+
+    .blog-card__info h5 {
+      margin-bottom: 0.5em;
+    }
+
+    .blog-card__info p {
+      margin-bottom: 0.5em;
+    }
+
+    .blog-card__info a {
+      text-decoration: none;
+      color: #b45a08;
+      cursor: url('assets/cursor-click.png'), auto;
+    }
+
+    .btn {
+      background-color: #b45a08;
+      border: 2px solid #000;
+      color: #fff;
+      padding: 0.5em 1em;
+      text-decoration: none;
+      border-radius: 5px;
+      font-family: 'zpix', sans-serif;
+      cursor: url('assets/cursor-click.png'), auto;
+    }
+
+    .btn--with-icon .btn-icon {
+      margin-left: 0.5em;
+    }
+
+    /* New style for hiding the text initially */
+    .hidden-text {
+      display: none;
+    }
+
+    #menu {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      /* background-color: #b45a08; */
+      padding: 10px;
+      border-radius: 5px;
+      z-index: 20;
+      align-items: center;
+      /* Center items vertically */
+    }
+
+    #menu li {
+      cursor: url('assets/cursor-click.png'), auto;
+      margin-left: 20px;
+      font-size: 1em;
+      background-color: #b45a08;
+      padding: 10px;
+      border-radius: 5px;
+      border: 2px solid #000;
+      transition: box-shadow 0.3s ease-in-out;
+      display: flex;
+      /* Enable flexbox */
+      justify-content: center;
+      /* Center content horizontally */
+      align-items: center;
+      /* Center content vertically */
+      text-align: center;
+      /* Center text */
+    }
+
+    #menu li:hover {
+      cursor: url('assets/cursor-click.png'), auto;
+      /* Specify the custom cursor for hover */
+      box-shadow: 5px 5px 0px 0px #000;
+      /* Shadow effect on hover */
+    }
+
+    #menu li a {
+      cursor: url('assets/cursor-click.png'), auto;
+      text-decoration: none;
+      color: #000;
+      display: block;
+      /* Make the entire list item area clickable */
+      width: 100%;
+      /* Ensure anchor tag takes up full width of list item */
+      height: 100%;
+      /* Ensure anchor tag takes up full height of list item */
+      text-align: center;
+      /* Center text */
+    }
+
+    #menu li.github-icon {
+      background: #b45a08;
+      border: 2px solid #000;
+      /* background: none;
+    border: none;
+    box-shadow: none; */
+    }
+
+    #menu li.github-icon a {
+      padding: 0;
+    }
+
+    #menu li.github-icon a img {
+      width: 30px;
+      /* Adjust the size as needed */
+      height: auto;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    .column {
+      flex: 1;
+      width: 50%;
+      padding: 1em;
+      box-sizing: border-box;
+    }
+
+    .card {
+      border: 2px solid #000;
+      border-radius: 5px;
+      overflow: hidden;
+      background-color: #ffffff;
+      margin-bottom: 1em;
+      position: relative;  /* Add this line */
+      cursor: url('assets/cursor-click.png'), auto;
+    }
+
+    .card h1 {
+      background-color: #b45a08;
+      color: #fff;
+      padding: 1em;
+      text-align: center;
+      margin: 0;
+      cursor: url('assets/cursor-click.png'), auto;
+    }
+
+    .card p {
+      padding: 1em;
+      margin: 0;
+      cursor: url('assets/cursor-click.png'), auto;
+    }
+
+    .card a {
+      display: block;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;  /* Add this line */
+      cursor: url('assets/cursor-click.png'), auto;
+    }
+
+
+
+    /* Media Query for smaller screens */
+    @media (max-width: 768px) {
+      .hero {
+        min-height: 150px;
+        background-size: cover;
+        width: 100%;
+        padding-left: 0;
+        /* Remove left padding */
+        padding-right: 0;
+        /* Remove right padding */
+      }
+
+      .subsection {
+        margin-bottom: 10px;
+        /* Reduce space between subsections */
+        padding: 10px;
+        /* Reduce padding inside each subsection */
+      }
+
+      .column {
+        flex: 1 0 100%;
+        /* Full width on small screens */
+      }
+
+      #menu li {
+        padding: 5px;
+      }
+
+      #menu {
+        top: 0;
+        left: 0;
+        width: 100%;
+        /* Full width */
+        /* background-color: rgba(0, 0, 0, 0.7); */
+        /* Optional: background color for better readability */
+      }
+
+      .hero-text h1 {
+        font-size: 3em;
+        /* Adjust font size */
+      }
+    }
+
+    /* Add these styles for the hamburger menu */
+    #hamburger-menu {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      margin: 0;
+      padding: 0;
+    }
+
+    #hamburger-menu div {
+      width: 35px;
+      height: 5px;
+      background-color: #333;
+      margin: 6px 0;
+    }
+
+    @media screen and (max-width: 540px) {
+      #menu {
+        display: none;
+      }
+
+      #hamburger-menu {
+        display: flex;
+      }
+
+      /* Hamburger menu expanded */
+      #hamburger-menu.expanded+#menu {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        background-color: #fff;
+        border: 2px solid #000;
+        border-radius: 5px;
+      }
+
+      #hamburger-menu.expanded div:first-child {
+        transform: rotate(45deg);
+        position: relative;
+        top: 12px;
+      }
+
+      #hamburger-menu.expanded div:last-child {
+        transform: rotate(-45deg);
+        position: relative;
+        top: -12px;
+      }
+
+      #hamburger-menu.expanded div:nth-child(2) {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div id="hamburger-menu" onclick="toggleMenu()">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <ul id="menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="https://lados-organization.gitbook.io/goku/">Learn</a></li>
+      <li><a href="news.html">News</a></li>
+      <li><a href="community.html">Community</a></li>
+      <!-- <li><a href="#assets">Assets</a></li> -->
+      <li><a href="https://github.com/ladroid/goku/tree/main/examples">Examples</a></li>
+      <li class="github-icon"><a href="https://github.com/ladroid/goku"><img src="assets/Github.png" alt="GitHub"></a></li>
+    </ul>
+  </nav>
+  <div class="container space-below-menu">
+    <div class="column">
+      <div class="card">
+        <h1>Github</h1>
+        <p>Interact with Goku's source code, report issues, and suggest changes</p>
+        <a href="https://github.com/ladroid/goku" title="Goku"></a>
+      </div>
+      <div class="card">
+        <h1>Discord</h1>
+        <p>A community to discuss Goku, Rust, and game development</p>
+        <a href="https://discord.gg/9TAMqdRyED" title="Discord"></a>
+      </div>
+      <!-- ... More cards for the first column ... -->
+    </div>
+    <div class="column">
+      <div class="card">
+        <h1>Goku Q&A</h1>
+        <p>The go-to place to ask Goku questions and get Goku answers</p>
+        <a href="https://github.com/ladroid/goku/discussions/categories/q-a" title="QA"></a>
+      </div>
+      <div class="card">
+        <h1>Goky Discussions</h1>
+        <p>The place to discuss about Goku</p>
+        <a href="https://github.com/ladroid/goku/discussions" title="Discussions"></a>
+      </div>
+      <!-- ... More cards for the second column ... -->
+    </div>
+  </div>
+  <script>
+    function toggleMenu() {
+      var menu = document.getElementById('hamburger-menu');
+      if (menu.classList.contains('expanded')) {
+        menu.classList.remove('expanded');
+      } else {
+        menu.classList.add('expanded');
+      }
+    }
+
+    function toggleText(cardIndex) {
+      var fullText = document.querySelectorAll('.hidden-text')[cardIndex];
+      var summaryText = document.querySelectorAll('.summary-text')[cardIndex];
+      if (fullText.style.display === 'none' || fullText.style.display === '') {
+        fullText.style.display = 'block';
+        summaryText.style.display = 'none';
+      } else {
+        fullText.style.display = 'none';
+        summaryText.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+
+</html>

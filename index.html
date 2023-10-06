@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Goku Game Engine</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue-i18n@8/dist/vue-i18n.js"></script>
+  <!-- Remove js confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+  <script src="script.js"></script>
+  <style>
+    @font-face {
+      font-family: 'zpix';
+      src: url('zpix.ttf') format('opentype');
+    }
+
+    .japanese-font {
+      font-family: 'zpix', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      width: auto;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      border: none;
+      font-family: 'zpix', sans-serif;
+      line-height: 1.15;
+      font-size: 16px;
+      width: auto;
+      cursor: url('assets/cursor.png'), auto;
+    }
+
+    .background-alt {
+      background: #ffffff;
+      /* Changed from #F5F5F5 to #ffffff */
+      margin: 0;
+      padding: 0;
+      border: none;
+    }
+
+    .heading {
+      position: relative;
+      display: inline-block;
+      font-family: 'zpix', sans-serif;
+      font-size: 1.6em;
+      font-weight: 300;
+      margin: 0 0 30px 0;
+    }
+
+    .heading:after {
+      position: absolute;
+      content: '';
+      top: 100%;
+      height: 1px;
+      width: 50px;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      background: #db8e35;
+    }
+
+    /* Hero section */
+    .hero {
+      min-height: 150px;
+      background-color: #b45a08;
+      position: relative;
+      text-align: center;
+      align-items: center;
+      padding-top: 10%;
+      padding-bottom: 5%;
+    }
+
+    .hero .down-arrow a {
+      color: #fff;
+      font-size: 30px;
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      animation: pulsate 1.4s ease;
+      animation-iteration-count: infinite;
+      padding-top: 5px
+    }
+
+    .hero .down-arrow a:hover {
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(128, 49, 0, 0.8);
+      transition: .5s ease all;
+    }
+
+    .hero-text {
+      /* Removed absolute positioning */
+      z-index: 10;
+      text-align: center;
+    }
+
+    .hero-text h1,
+    .hero-text h2 {
+      margin: 0;
+      color: #fff;
+    }
+
+    .hero-text h1 {
+      color: #fff;
+      font-family: "zpix", sans-serif;
+      font-weight: 900;
+      font-size: 4.35em;
+      /* text-transform: uppercase; */
+      letter-spacing: 0.05em;
+      line-height: 1.1em;
+      margin-bottom: 15px;
+      text-shadow: -5px 0 black, 0 5px black, 5px 0 black, 0 -5px black;
+    }
+
+    .hero-text h2 {
+      color: #1a1611;
+      font-family: "zpix", sans-serif;
+      font-weight: 400;
+      font-size: 2em;
+      color: #ffca8a;
+      text-shadow: -2px 0 black, 0 2px #000, 2px 0 #000, 0 -2px #000;
+      margin-bottom: 15px
+    }
+
+    /* Added height to the second section */
+    #second-section {
+      height: auto;
+      /* Changed to auto to accommodate varying content */
+      background: #ffffff;
+      margin: 0;
+      padding: 50px;
+      /* Added padding */
+      border: none;
+      display: flex;
+      flex-wrap: wrap;
+      /* Set to flex */
+      justify-content: space-between;
+      /* Space between the two columns */
+    }
+
+    /* Add margin and padding to subsections */
+    .subsection {
+      margin-bottom: 10px;
+      /* Add space between subsections */
+      padding: 10px;
+      /* Add padding inside each subsection */
+      height: 200px;
+    }
+
+    .column-container {
+      display: flex;
+      flex-direction: row;
+      /* Change to row for horizontal alignment */
+    }
+
+    .column {
+      flex: 1;
+      width: 45%;
+      /* Set width to 45% to allow some space between */
+      display: flex;
+      /* Set to flex */
+      flex-direction: column;
+      /* Align subsections vertically */
+    }
+
+    .subsection img {
+      width: 100%;
+      /* Set image width to 100% */
+      height: auto;
+      /* Maintain aspect ratio */
+    }
+
+    #hero-overlay {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      background: rgba(236, 175, 8, 0.2);
+    }
+
+    #buttons button {
+      margin: 10px;
+      font-family: 'zpix', sans-serif;
+      cursor: url('assets/cursor-click.png'), auto;
+      /* Specify the custom cursor for hover */
+      transition: box-shadow 0.3s ease-in-out;
+      /* Add transition for smooth animation */
+      position: relative;
+      /* Add position relative to contain the shadow within the button element */
+      padding: 15px 30px;
+      /* Increase size of button */
+      background-color: #ffffff;
+      /* Set button background to white */
+      border: 2px solid #000;
+      /* Add border to button */
+      font-size: 1em;
+      /* Increase font size */
+      border-radius: 5px;
+    }
+
+    #buttons button:hover {
+      background-color: #ffffff;
+      /* Ensure button background remains white on hover */
+      box-shadow: 5px 5px 0px 0px #000;
+      /* Shadow effect on hover */
+    }
+
+    #menu {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      /* background-color: #b45a08; */
+      padding: 10px;
+      border-radius: 5px;
+      z-index: 20;
+      align-items: center;
+      /* Center items vertically */
+    }
+
+    #menu li {
+      cursor: url('assets/cursor-click.png'), auto;
+      margin-left: 20px;
+      font-size: 1em;
+      background-color: #ffffff;
+      padding: 10px;
+      border-radius: 5px;
+      border: 2px solid #000;
+      transition: box-shadow 0.3s ease-in-out;
+      display: flex;
+      /* Enable flexbox */
+      justify-content: center;
+      /* Center content horizontally */
+      align-items: center;
+      /* Center content vertically */
+      text-align: center;
+      /* Center text */
+    }
+
+    #menu li:hover {
+      cursor: url('assets/cursor-click.png'), auto;
+      /* Specify the custom cursor for hover */
+      box-shadow: 5px 5px 0px 0px #000;
+      /* Shadow effect on hover */
+    }
+
+    #menu li a {
+      cursor: url('assets/cursor-click.png'), auto;
+      text-decoration: none;
+      color: #000;
+      display: block;
+      /* Make the entire list item area clickable */
+      width: 100%;
+      /* Ensure anchor tag takes up full width of list item */
+      height: 100%;
+      /* Ensure anchor tag takes up full height of list item */
+      text-align: center;
+      /* Center text */
+    }
+
+    #menu li.github-icon {
+      background: #ffffff;
+      border: 2px solid #000;
+      /* background: none;
+    border: none;
+    box-shadow: none; */
+    }
+
+    #menu li.github-icon a {
+      padding: 0;
+    }
+
+    #menu li.github-icon a img {
+      width: 30px;
+      /* Adjust the size as needed */
+      height: auto;
+    }
+
+    /* New styles to increase font size for h2 and p within all subsections */
+    .subsection h2 {
+      font-size: 2em;
+      /* Adjust as needed */
+    }
+
+    .subsection p {
+      font-size: 1em;
+      /* Adjust as needed */
+    }
+
+    .footer {
+      cursor: url('assets/cursor.png'), auto;
+      background-color: #b45a08;
+      /* Same color as hero section */
+      padding: 40px;
+      /* Adjust padding as needed */
+      text-align: center;
+      /* Center the text */
+      font-family: 'zpix', sans-serif;
+      /* Maintain the font styling */
+      color: #fff;
+      /* White text color */
+      font-size: 1em;
+      /* Adjust font size as needed */
+      position: relative;
+      /* Adjust position if needed */
+      bottom: 0;
+      /* Keeps footer at bottom */
+      width: 100%;
+      /* Full width */
+      display: flex;
+      /* New: set to flex */
+      justify-content: center;
+      /* New: center items horizontally */
+      align-items: center;
+      /* New: align items vertically */
+    }
+
+    .footer p {
+      font-size: 1em;
+      /* Adjust as needed */
+      margin: 0;
+      /* New: reset margin */
+      position: absolute;
+      /* New: position absolutely */
+      left: 50%;
+      /* New: center horizontally */
+      transform: translateX(-50%);
+      /* New: center horizontally */
+    }
+
+    .language-switcher {
+      cursor: url('assets/cursor-click.png'), auto;
+      position: absolute;
+      /* New: position absolutely */
+      right: 80px;
+      /* New: position to the right */
+      padding: 10px;
+      /* Some padding */
+      border-radius: 5px;
+      /* Optional: rounded corners */
+      font-family: 'zpix', sans-serif;
+      /* VT323 font */
+    }
+
+    .language-switcher label,
+    .language-switcher select {
+      cursor: url('assets/cursor-click.png'), auto;
+      font-family: 'zpix', sans-serif;
+      /* VT323 font */
+    }
+
+    .language-switcher select {
+      cursor: url('assets/cursor-click.png'), auto;
+      padding: 5px;
+      /* Some padding */
+      border-radius: 5px;
+      /* Optional: rounded corners */
+      border: 1px solid #000;
+      /* Optional: border */
+    }
+
+    /* Media Query for smaller screens */
+    @media (max-width: 768px) {
+      .hero {
+        min-height: 150px;
+        background-size: cover;
+        width: 100%;
+        padding-left: 0;
+        /* Remove left padding */
+        padding-right: 0;
+        /* Remove right padding */
+      }
+
+      .subsection {
+        margin-bottom: 10px;
+        /* Reduce space between subsections */
+        padding: 10px;
+        /* Reduce padding inside each subsection */
+      }
+
+      .column {
+        flex: 1 0 100%;
+        /* Full width on small screens */
+      }
+
+      #menu li {
+        padding: 5px;
+      }
+
+      #menu {
+        top: 0;
+        left: 0;
+        width: 100%;
+        /* Full width */
+        /* background-color: rgba(0, 0, 0, 0.7); */
+        /* Optional: background color for better readability */
+      }
+
+      .hero-text h1 {
+        font-size: 3em;
+        /* Adjust font size */
+      }
+
+      .language-switcher {
+        position: static;
+        /* Reset positioning */
+        margin-top: 25px;
+        /* Add some space above the language switcher */
+      }
+
+      .footer {
+        flex-direction: column;
+        /* Stack elements vertically */
+        text-align: center;
+        /* Center the text */
+      }
+
+      .footer p {
+        font-size: 1em;
+        /* Adjust as needed */
+        margin: 0;
+        /* Reset margin */
+        position: static;
+        /* Reset position */
+        text-align: center;
+        /* Center the text horizontally */
+        left: auto;
+        /* Reset the left property */
+        transform: none;
+        /* Reset the transform property */
+        width: 100%;
+        /* Set the width to 100% */
+      }
+    }
+
+    /* Add these styles for the hamburger menu */
+    #hamburger-menu {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      margin: 0;
+      padding: 0;
+    }
+
+    #hamburger-menu div {
+      width: 35px;
+      height: 5px;
+      background-color: #333;
+      margin: 6px 0;
+    }
+
+    @media screen and (max-width: 540px) {
+      #menu {
+        display: none;
+      }
+
+      #hamburger-menu {
+        display: flex;
+      }
+
+      /* Hamburger menu expanded */
+      #hamburger-menu.expanded+#menu {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        background-color: #fff;
+        border: 2px solid #000;
+        border-radius: 5px;
+      }
+
+      #hamburger-menu.expanded div:first-child {
+        transform: rotate(45deg);
+        position: relative;
+        top: 12px;
+      }
+
+      #hamburger-menu.expanded div:last-child {
+        transform: rotate(-45deg);
+        position: relative;
+        top: -12px;
+      }
+
+      #hamburger-menu.expanded div:nth-child(2) {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <nav>
+      <div id="hamburger-menu" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <ul id="menu">
+        <li><a href="https://lados-organization.gitbook.io/goku/">{{ $t('menu.learn') }}</a></li>
+        <li><a href="news.html">{{ $t('menu.news') }}</a></li>
+        <li><a href="community.html">{{ $t('menu.community') }}</a></li>
+        <!-- <li><a href="#assets">{{ $t('menu.assets') }}</a></li> -->
+        <li><a href="https://github.com/ladroid/goku/tree/main/examples">{{ $t('menu.examples') }}</a></li>
+        <li class="github-icon"><a href="https://github.com/ladroid/goku"><img src="assets/Github.png"
+              alt="{{ $t('menu.github') }}"></a></li>
+      </ul>
+    </nav>
+    <section id="first-section" class="hero">
+      <div class="hero-text">
+        <h1>{{ $t('welcomeTitle') }}</h1>
+        <h2>{{ $t('welcomeSubtitle') }}</h2>
+      </div>
+      <div id="buttons">
+        <button onclick="window.location.href='https://lados-organization.gitbook.io/goku/';">{{ $t('getStarted')
+          }}</button>
+      </div>
+    </section>
+    <section id="second-section" class="background-alt">
+      <!-- Column 1 -->
+      <div class="column">
+        <!-- Subsection 1 -->
+        <div class="subsection">
+          <h2>{{ $t('robustTitle') }}</h2>
+          <p>{{ $t('robustDescription') }}</p>
+          <!-- <img src="image1.jpg" alt="Image related to Cross platform"> Replace with your image -->
+        </div>
+        <!-- Subsection 3 -->
+        <div class="subsection">
+          <h2>{{ $t('graphicsMasteryTitle') }}</h2>
+          <p>{{ $t('graphicsMasteryDescription') }}</p>
+          <!-- <img src="image3.jpg" alt="Image related to Subsection 3"> Replace with your image -->
+        </div>
+        <div class="subsection">
+          <h2>{{ $t('audioControlTitle') }}</h2>
+          <p>{{ $t('audioControlDescription') }}</p>
+          <!-- <img src="image3.jpg" alt="Image related to Subsection 3"> Replace with your image -->
+        </div>
+        <div class="subsection">
+          <h2>{{ $t('interactiveEngagementTitle') }}</h2>
+          <p>{{ $t('interactiveEngagementDescription') }}</p>
+          <!-- <img src="image3.jpg" alt="Image related to Subsection 3"> Replace with your image -->
+        </div>
+      </div>
+
+      <!-- Column 2 -->
+      <div class="column">
+        <!-- Subsection 2 -->
+        <div class="subsection">
+          <h2>{{ $t('guiDevelopmentInterfaceTitle') }}</h2>
+          <p>{{ $t('guiDevelopmentInterfaceDescription') }}</p>
+          <!-- <img src="image2.jpg" alt="Image related to 2D Render"> Replace with your image -->
+        </div>
+        <!-- Subsection 4 -->
+        <div class="subsection">
+          <h2>{{ $t('physicsAnimationTitle') }}</h2>
+          <p>{{ $t('physicsAnimationDescription') }}</p>
+          <!-- <img src="image4.jpg" alt="Image related to Subsection 4"> Replace with your image -->
+        </div>
+        <div class="subsection">
+          <h2>{{ $t('sceneCompositionTitle') }}</h2>
+          <p>{{ $t('sceneCompositionDescription') }}</p>
+          <!-- <img src="image4.jpg" alt="Image related to Subsection 4"> Replace with your image -->
+        </div>
+        <div class="subsection">
+          <h2>{{ $t('aiDialogueSystemsTitle') }}</h2>
+          <p>{{ $t('aiDialogueSystemsDescription') }}</p>
+          <!-- <img src="image4.jpg" alt="Image related to Subsection 4"> Replace with your image -->
+        </div>
+      </div>
+    </section>
+    <footer class="footer">
+      <p>&copy; 2023 Goku Game Engine. All rights reserved.</p>
+      <div class="language-switcher">
+        <label for="language-selector">Language:</label>
+        <select id="language-selector" onchange="changeLanguage(this)">
+          <option value="en" selected>English</option>
+          <option value="es">Español</option>
+          <option value="de">Deutsch</option>
+          <option value="fr">Français</option>
+          <option value="ja">日本語</option>
+          <!-- Add more languages as needed -->
+        </select>
+      </div>
+    </footer>
+  </div>
+  <script>
+    function toggleMenu() {
+      var menu = document.getElementById('hamburger-menu');
+      if (menu.classList.contains('expanded')) {
+        menu.classList.remove('expanded');
+      } else {
+        menu.classList.add('expanded');
+      }
+    }
+  </script>
+  <!-- Remove this script after -->
+  <script setup>
+    const confetti = new JSConfetti()
+
+    function showConfetti() {
+      confetti.addConfetti()
+    }
+
+    showConfetti()
+  </script>
+</body>
+
+</html>
