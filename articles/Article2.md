@@ -227,7 +227,7 @@ Code sample:
 let ttf_context = sdl2::ttf::init().map_err(|e| e.to_string())?;
 let mut dialogue_box = two_d::DialogueBox::new();
 // Load a font:
-let font_path = std::path::Path::new("E:\\Projects\\RustProj\\GameEngine\\goku\\src\\ARIALUNI.TTF");
+let font_path = std::path::Path::new("ARIALUNI.TTF");
 let font_size = 24;
 let font = std::sync::Arc::new(sdl2::ttf::Sdl2TtfContext::load_font(&ttf_context, font_path, font_size)?);
 let text_box = std::rc::Rc::new(two_d::DialogueTextBox::new(Some("Charlie".to_string()), "Hello, world".to_lowercase(), font, sdl2::rect::Rect::new(50, 500, 100, 80)));
