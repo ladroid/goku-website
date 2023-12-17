@@ -10,6 +10,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
   <!-- Load the element definition -->
   <script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@1/src/zero-md.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue-i18n@8/dist/vue-i18n.js"></script>
+  <script src="script.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
   <style>
     @font-face {
@@ -326,48 +329,50 @@
 </head>
 
 <body>
-  <nav>
-    <div id="hamburger-menu" onclick="toggleMenu()">
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-    <ul id="menu">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="https://lados-organization.gitbook.io/goku/">Learn</a></li>
-      <li><a href="news.html">News</a></li>
-      <li><a href="community.html">Community</a></li>
-      <!-- <li><a href="#assets">Assets</a></li> -->
-      <li><a href="https://github.com/ladroid/goku/tree/main/examples">Examples</a></li>
-      <li class="github-icon"><a href="https://github.com/ladroid/goku"><img src="assets/Github.png" alt="GitHub"></a></li>
-    </ul>
-  </nav>
-  <div class="container space-below-menu">
-    <div class="column">
-      <div class="card">
-        <h1>Github</h1>
-        <p>Interact with Goku's source code, report issues, and suggest changes</p>
-        <a href="https://github.com/ladroid/goku" title="Goku"></a>
+  <div id="app">
+    <nav>
+      <div id="hamburger-menu" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
-      <div class="card">
-        <h1>Discord</h1>
-        <p>A community to discuss Goku, Rust, and game development</p>
-        <a href="https://discord.gg/9TAMqdRyED" title="Discord"></a>
+      <ul id="menu">
+        <li><a href="index.html">{{ $t('menu.home') }}</a></li>
+        <li><a href="https://lados-organization.gitbook.io/goku/">{{ $t('menu.learn') }}</a></li>
+        <li><a href="news.html">{{ $t('menu.news') }}</a></li>
+        <li><a href="community.html">{{ $t('menu.community') }}</a></li>
+        <li><a href="https://github.com/ladroid/goku/tree/main/examples">{{ $t('menu.examples') }}</a></li>
+        <li class="github-icon"><a href="https://github.com/ladroid/goku"><img src="assets/Github.png" alt="{{ $t('menu.github') }}"></a></li>
+      </ul>
+    </nav>
+  
+    <div class="container space-below-menu">
+      <div class="column">
+        <div class="card">
+          <h1>Github</h1>
+          <p>{{ $t('githubDesc') }}</p>
+          <a href="https://github.com/ladroid/goku" title="Goku"></a>
+        </div>
+        <div class="card">
+          <h1>Discord</h1>
+          <p>{{ $t('discordDesc') }}</p>
+          <a href="https://discord.gg/9TAMqdRyED" title="Discord"></a>
+        </div>
+        <!-- ... More cards for the first column ... -->
       </div>
-      <!-- ... More cards for the first column ... -->
-    </div>
-    <div class="column">
-      <div class="card">
-        <h1>Goku Q&A</h1>
-        <p>The go-to place to ask Goku questions and get Goku answers</p>
-        <a href="https://github.com/ladroid/goku/discussions/categories/q-a" title="QA"></a>
+      <div class="column">
+        <div class="card">
+          <h1>Goku Q&A</h1>
+          <p>{{ $t('gokuQADesc') }}</p>
+          <a href="https://github.com/ladroid/goku/discussions/categories/q-a" title="QA"></a>
+        </div>
+        <div class="card">
+          <h1>Goku Discussions</h1>
+          <p>{{ $t('gokuDiscussionsDesc') }}</p>
+          <a href="https://github.com/ladroid/goku/discussions" title="Discussions"></a>
+        </div>
+        <!-- ... More cards for the second column ... -->
       </div>
-      <div class="card">
-        <h1>Goky Discussions</h1>
-        <p>The place to discuss about Goku</p>
-        <a href="https://github.com/ladroid/goku/discussions" title="Discussions"></a>
-      </div>
-      <!-- ... More cards for the second column ... -->
     </div>
   </div>
   <script>

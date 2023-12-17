@@ -10,6 +10,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
   <!-- Load the element definition -->
   <script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@1/src/zero-md.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue-i18n@8/dist/vue-i18n.js"></script>
+  <script src="script.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
   <style>
     @font-face {
@@ -275,22 +278,23 @@
 </head>
 
 <body>
-  <nav>
-    <div id="hamburger-menu" onclick="toggleMenu()">
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-    <ul id="menu">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="https://lados-organization.gitbook.io/goku/">Learn</a></li>
-      <li><a href="news.html">News</a></li>
-      <li><a href="community.html">Community</a></li>
-      <!-- <li><a href="#assets">Assets</a></li> -->
-      <li><a href="https://github.com/ladroid/goku/tree/main/examples">Examples</a></li>
-      <li class="github-icon"><a href="https://github.com/ladroid/goku"><img src="assets/Github.png" alt="GitHub"></a></li>
-    </ul>
-  </nav>
+  <div id="app">
+    <nav>
+      <div id="hamburger-menu" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <ul id="menu">
+        <li><a href="index.html">{{ $t('menu.home') }}</a></li>
+        <li><a href="https://lados-organization.gitbook.io/goku/">{{ $t('menu.learn') }}</a></li>
+        <li><a href="news.html">{{ $t('menu.news') }}</a></li>
+        <li><a href="community.html">{{ $t('menu.community') }}</a></li>
+        <li><a href="https://github.com/ladroid/goku/tree/main/examples">{{ $t('menu.examples') }}</a></li>
+        <li class="github-icon"><a href="https://github.com/ladroid/goku"><img src="assets/Github.png" alt="{{ $t('menu.github') }}"></a></li>
+      </ul>
+    </nav>
+  </div>
   <div class="container mt-5 space-below-menu">
     <div class="row">
       <div class="col-12">
@@ -339,7 +343,7 @@
           <div class="blog-card__info">
             <h5 style="font-weight: bold">Unfolding Creativity: My Journey Through Developing a New Game Engine</h5>
             <p>
-              <a href="#" class="icon-link mr-3"><i class="fa fa-pencil-square-o"></i>ladroid</a>
+              <a href="https://twitter.com/ladroider" class="icon-link mr-3"><i class="fa fa-pencil-square-o"></i>ladroid</a>
             </p>
             <p class="summary-text">Hey there fellow game...</p>
             <zero-md class="hidden-text" src="articles/Article1.md">
