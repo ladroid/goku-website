@@ -1,4 +1,4 @@
-window.onload = function() {
+document.addEventListener('DOMContentLoaded', function() {
     const messages = {
         en: {
             welcomeTitle: 'Goku',
@@ -21,13 +21,18 @@ window.onload = function() {
             aiDialogueSystemsDescription: 'Build engaging narratives and smart AI systems, with an intuitive behavior tree and dialogue system at your disposal',
             getStarted: 'Get Started',
             menu: {
+                home: 'Home',
                 learn: 'Learn',
                 news: 'News',
                 community: 'Community',
                 assets: 'Assets',
                 examples: 'Examples',
                 github: 'GitHub'
-            }
+            },
+            githubDesc: 'Interact with Goku\'s source code, report issues, and suggest changes',
+            discordDesc: 'A community to discuss Goku, Rust, and game development',
+            gokuQADesc: 'The go-to place to ask Goku questions and get Goku answers',
+            gokuDiscussionsDesc: 'The place to discuss about Goku',
             // ...other translations
         },
         es: {
@@ -51,13 +56,18 @@ window.onload = function() {
             aiDialogueSystemsDescription: 'Construye narrativas atractivas y sistemas de IA inteligentes, con un intuitivo árbol de comportamiento y sistema de diálogo a tu disposición',
             getStarted: 'Comenzar',
             menu: {
+                home: 'Inicio',
                 learn: 'Aprender',
                 news: 'Noticias',
                 community: 'Comunidad',
                 assets: 'Activos',
                 examples: 'Ejemplos',
                 github: 'GitHub'
-            }
+            },
+            githubDesc: 'Interactúa con el código fuente de Goku, reporta problemas y sugiere cambios',
+            discordDesc: 'Una comunidad para discutir sobre Goku, Rust y el desarrollo de juegos',
+            gokuQADesc: 'El lugar indicado para hacer preguntas sobre Goku y obtener respuestas',
+            gokuDiscussionsDesc: 'El lugar para discutir sobre Goku',
             // ...other translations
         },
         de: {
@@ -81,13 +91,18 @@ window.onload = function() {
             aiDialogueSystemsDescription: 'Erstellen Sie ansprechende Erzählungen und intelligente KI-Systeme mit einem intuitiven Verhaltensbaum und einem Dialogsystem zur Verfügung',
             getStarted: 'Anfangen',
             menu: {
+                home: 'Startseite',
                 learn: 'Lernen',
                 news: 'Nachrichten',
                 community: 'Gemeinschaft',
                 assets: 'Vermögenswerte',
                 examples: 'Beispiele',
                 github: 'GitHub'
-            }
+            },
+            githubDesc: 'Interagiere mit dem Quellcode von Goku, melde Probleme und schlage Änderungen vor',
+            discordDesc: 'Eine Gemeinschaft, um über Goku, Rust und die Spieleentwicklung zu diskutieren',
+            gokuQADesc: 'Der Anlaufpunkt, um Fragen zu Goku zu stellen und Antworten zu bekommen',
+            gokuDiscussionsDesc: 'Der Ort, um über Goku zu diskutieren',
             // ...other translations
         },
         fr: {
@@ -111,13 +126,18 @@ window.onload = function() {
             aiDialogueSystemsDescription: 'Construisez des récits engageants et des systèmes IA intelligents, avec un arbre de comportement intuitif et un système de dialogue à votre disposition',
             getStarted: 'Commencer',
             menu: {
+                home: 'Accueil',
                 learn: 'Apprendre',
                 news: 'Actualités',
                 community: 'Communauté',
                 assets: 'Actifs',
                 examples: 'Exemples',
                 github: 'GitHub'
-            }
+            },
+            githubDesc: 'Interagissez avec le code source de Goku, signalez des problèmes et suggérez des modifications',
+            discordDesc: 'Une communauté pour discuter de Goku, Rust et du développement de jeux',
+            gokuQADesc: 'L\'endroit idéal pour poser des questions sur Goku et obtenir des réponses',
+            gokuDiscussionsDesc: 'Le lieu pour discuter de Goku',
             // ...other translations
         },
         ja: {
@@ -141,13 +161,18 @@ window.onload = function() {
             aiDialogueSystemsDescription: '直感的な動作ツリーとダイアログシステムを利用して、エンゲージングなナラティブとスマートなAIシステムを構築します',
             getStarted: '始める',
             menu: {
+                home: 'ホーム',
                 learn: '学ぶ',
                 news: 'ニュース',
                 community: 'コミュニティ',
                 assets: 'アセット',
                 examples: '例',
                 github: 'GitHub'
-            }
+            },
+            githubDesc: 'Gokuのソースコードとの対話、問題の報告、変更の提案',
+            discordDesc: 'Goku、Rust、ゲーム開発について話し合うコミュニティ',
+            gokuQADesc: 'Gokuに関する質問をして答えを得るための場所',
+            gokuDiscussionsDesc: 'Gokuについて話し合う場所',
             // ...other translations
         },        
         // ...other languages
@@ -155,7 +180,7 @@ window.onload = function() {
 
     // Create a new VueI18n instance
     const i18n = new VueI18n({
-        locale: 'en', // set locale
+        locale: localStorage.getItem('selectedLanguage') || 'en', // set locale based on saved preference or default to 'en'
         messages, // set locale messages
     });
 
@@ -165,18 +190,19 @@ window.onload = function() {
         i18n, // pass the VueI18n instance to the Vue instance
     });
 
+    // Change Language Function
     window.changeLanguage = function(selector) {
         var lang = selector.value;
-        i18n.locale = lang; // change the language of your VueI18n instance
-        localStorage.setItem('selectedLanguage', lang); // save the selected language to localStorage
-        console.log('Language changed to:', lang);
+        i18n.locale = lang; // Change the language
+        localStorage.setItem('selectedLanguage', lang); // Save the selected language
     }
 
-    // Check localStorage for a previously saved language setting
+    // Set the language selector to the saved language
     var savedLanguage = localStorage.getItem('selectedLanguage');
     if (savedLanguage) {
-        i18n.locale = savedLanguage; // set the saved language as the initial language
-        document.getElementById('language-selector').value = savedLanguage; // update the language selector dropdown
-        console.log('Language loaded from localStorage:', savedLanguage);
+        var languageSelector = document.getElementById('language-selector');
+        if (languageSelector) {
+            languageSelector.value = savedLanguage;
+        }
     }
-}
+});
