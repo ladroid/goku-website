@@ -205,5 +205,4 @@ document.addEventListener('DOMContentLoaded', function() {
             languageSelector.value = savedLanguage;
         }
     }
-    
 });
